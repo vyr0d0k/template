@@ -7,7 +7,7 @@ from utils.misc import rate_limit
 
 
 @rate_limit(5, 'help')
-@dp.message_handler(CommandHelp())
+@dp.message_handler(CommandHelp(), user_id=admins)
 async def bot_help(message: types.Message):
     id = message.from_user.id
     text = [
@@ -17,10 +17,15 @@ async def bot_help(message: types.Message):
         '/reset — Если что-то пошло не так'
     ]
     if id == owner:
-        text.extend([])
+        text.extend([
+            '/add_new_moderator — Добавить нового Модератора',
+            '/add_new_admin — Добавить нового Администратора'
+        ])
         await message.answer('\n'.join(text))
     elif id in admins:
-        text.extend([])
+        text.extend([
+            '/add_new_moderator — Добавить нового Модератора'
+        ])
         await message.answer('\n'.join(text))
     elif id in moderators:
         text.extend([])
