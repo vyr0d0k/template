@@ -1,35 +1,23 @@
-from aiogram import types
+from aiogram.types import Message
 from aiogram.dispatcher.filters.builtin import CommandHelp
 
-from data.config import admins, owner, moderators
+from data.config import owners
 from loader import dp
 from utils.misc import rate_limit
 
 
 @rate_limit(5, 'help')
-@dp.message_handler(CommandHelp(), user_id=admins)
-async def bot_help(message: types.Message):
-    id = message.from_user.id
+@dp.message_handler(CommandHelp())
+async def user_help(message: Message):
+    user_id = message.from_user.id
     text = [
-        'Список команд:\n',
+        'Список комманд:\n',
         '/start — Начать диалог',
         '/help — Получить справку',
-        '/reset — Если что-то пошло не так'
+        '/reset — Нажми, если что-то пошло не так'
     ]
-    if id == owner:
-        text.extend([
-            '/add_new_moderator — Добавить нового Модератора',
-            '/add_new_admin — Добавить нового Администратора'
-        ])
-        await message.answer('\n'.join(text))
-    elif id in admins:
-        text.extend([
-            '/add_new_moderator — Добавить нового Модератора'
-        ])
-        await message.answer('\n'.join(text))
-    elif id in moderators:
-        text.extend([])
-        await message.answer('\n'.join(text))
+    if user_id in owners:
+        text.append('/mail — Рассылка по пользователям')
+        await message.answer("\n".join(text))
     else:
-        text.extend([])
-        await message.answer('\n'.join(text))
+        await message.answer("\n".join(text))
