@@ -23,6 +23,8 @@ async def on_startup(dp):
     await db.gino.create_all()
     print("Готово")
 
+    await commands.permissions_groups()
+
     await on_startup_notify(dp)
     await set_default_commands(dp)
 

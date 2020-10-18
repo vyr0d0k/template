@@ -10,9 +10,11 @@ PGUSER = str(os.getenv("PGUSER"))
 PGPASSWORD = str(os.getenv("PGPASSWORD"))
 DATABASE = str(os.getenv("DATABASE"))
 
-owners = [
-    486468310
-]
+owners = []
+
+admins = []
+
+moderators = []
 
 ip = os.getenv("ip")
 
@@ -20,8 +22,8 @@ aiogram_redis = {
     'host': ip,
 }
 
-# db_host = ip
-db_host = "database"
+db_host = ip
+# db_host = "database"
 
 redis = {
     'address': (ip, 6379),
