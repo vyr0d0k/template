@@ -2,15 +2,7 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Command
 
-from data.config import owners
 from loader import dp
-from utils.db_api import commands
-
-
-# @dp.message_handler(Command("test"), state="*")
-# async def test_func(message: types.Message):
-#     await commands.list_of_owners()
-#     await message.answer(f"List:\n\n{owners}")
 
 
 @dp.message_handler(Command("reset"), state="*")
