@@ -1,6 +1,4 @@
-from .start import dp
-from .help import dp
-from .mail import dp
-from .misc import dp
+from .opening import dp
+from .closing import dp
 
 __all__ = ["dp"]

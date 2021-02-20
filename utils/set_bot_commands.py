@@ -5,5 +5,5 @@ async def set_default_commands(dp):
     await dp.bot.set_my_commands([
         types.BotCommand("start", "Запустить бота"),
         types.BotCommand("help", "Помощь"),
-        types.BotCommand("reset", "Нажми, если что-то пошло не так")
+        types.BotCommand("reset_state", "Нажми, если что-то пошло не так")
     ])

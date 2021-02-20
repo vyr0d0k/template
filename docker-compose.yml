@@ -1,33 +1,44 @@
-version: "3.1"
+version: "3"
 
 services:
   database:
     container_name: database
-    image: sameersbn/postgresql:12-20200524
+    image: postgres:alpine
+    restart: on-failure
+    env_file:
+      - ".env"
     environment:
-      PG_USER: $PGUSER
-      PG_PASSWORD: $PGPASSWORD
-      DB_NAME: $DATABASE
-    restart: always
-    ports:
-      - 5432:5432
+      POSTGRES_USER: $PG_USER
+      POSTGRES_PASSWORD: $PG_PASSWORD
+      POSTGRES_DB: $DATABASE
     networks:
       - botnet
+    ports:
+      - 5432:5432
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
+      - .data/postgresql:/var/lib/postgresql
 
-  tgbot:
+  redis:
+    container_name: redis
+    image: redis:alpine
+    restart: on-failure
+    volumes:
+      - .data/redis:/var/lib/redis
+    ports:
+      - 6379:6379
+
+  bot:
     container_name: bot
     build:
       context: .
+    restart: on-failure
     command: python app.py
-    restart: always
     networks:
       - botnet
-    env_file:
-      - ".env"
     depends_on:
       - database
+      - redis
+
 networks:
   botnet:
     driver: bridge

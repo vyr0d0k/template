@@ -1,35 +1,36 @@
+import logging
+
 from loader import db
-from utils.db_api import db_gino, commands
+from utils.db_api import db_gino
+from utils.misc import setup_logger
 from utils.set_bot_commands import set_default_commands
 
 
-async def on_startup(dp):
+async def on_startup(dispatcher):
     import filters
     import middlewares
-    filters.setup(dp)
-    middlewares.setup(dp)
+    filters.setup(dispatcher)
+    logging.info("Filters are successfully configured")
+    middlewares.setup(dispatcher)
+    logging.info("Middlewares are successfully configured")
 
     from utils.notify_admins import on_startup_notify
 
-    print("Подключаем БД")
-    await db_gino.on_startup(dp)
-    print("Готово")
+    await db_gino.on_startup()
+    logging.info("PostgreSQL is successfully connected")
 
-    # print("Чистим базу")
     # await db.gino.drop_all()
-    # print("Готово")
+    # logging.info("Database tables are successfully dropped")
 
-    print("Создаём таблицы")
     await db.gino.create_all()
-    print("Готово")
+    logging.info("Database tables are successfully loaded")
 
-    await commands.permissions_groups()
-
-    await on_startup_notify(dp)
-    await set_default_commands(dp)
+    await on_startup_notify(dispatcher)
+    await set_default_commands(dispatcher)
 
 
 if __name__ == '__main__':
+    setup_logger(['sqlalchemy.engine', 'aiogram.bot.api'])
     from aiogram import executor
     from handlers import dp
 

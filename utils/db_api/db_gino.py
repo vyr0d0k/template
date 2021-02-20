@@ -1,7 +1,6 @@
 from typing import List
 
 import sqlalchemy as sa
-from aiogram import Dispatcher
 from gino import Gino
 from sqlalchemy import Column, DateTime
 
@@ -35,6 +34,5 @@ class TimedBaseModel(BaseModel):
                         server_default=db.func.now())
 
 
-async def on_startup(dispatcher: Dispatcher):
-    print("Установка связи с PostgreSQL")
+async def on_startup():
     await db.set_bind(config.POSTGRES_URI)
